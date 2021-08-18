@@ -1,5 +1,10 @@
 plugins {
     id 'java'
+    id 'scala'
+    id 'distribution'
+    id 'maven-publish'
+    id "io.spring.dependency-management" version "1.0.10.RELEASE"
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 group 'org.convertlab'
@@ -10,15 +15,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.flink:flink-java:1.9.0'
+    implementation "org.apache.flink:flink-java:1.9.0"
     implementation 'org.apache.flink:flink-streaming-java_2.11:1.9.0'
     implementation 'org.apache.flink:flink-clients_2.11:1.9.0'
     implementation 'org.apache.flink:flink-core:1.9.0'
-    implementation 'org.apache.flink:flink-connector-kafka-0.8_2.10:1.9.0'
-//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation 'org.apache.flink:flink-connector-kafka_2.11:1.9.0'
 }
 
-test {
-    useJUnitPlatform()
+shadowJar {
+    zip64 true
 }

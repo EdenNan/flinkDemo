@@ -1,9 +1,11 @@
 package com.convertlab;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,12 +30,8 @@ public class FlinkDemo {
 
         ParameterTool parameterTool = ParameterTool.fromMap(properties);
 
-        FlinkKafkaConsumer010 consumer010 = new FlinkKafkaConsumer010(
-                parameterTool.getRequired("topic"), new SimpleStringSchema(), parameterTool.getProperties());
-
-
-        DataStream<String> messageStream = env
-                .addSource(consumer010);
+        FlinkKafkaConsumer consumer010 = new FlinkKafkaConsumer(
+                parameterTool.getRequired("topic"), new SimpleStringSchema(), parameterTool.getProperties());DataStream<String> messageStream = env.addSource(consumer010);
 
         // print() will write the contents of the stream to the TaskManager's standard out stream
         // the rebelance call is causing a repartitioning of the data so that all machines
