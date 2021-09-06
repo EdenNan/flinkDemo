@@ -5,6 +5,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -17,6 +18,8 @@ public class FlinkDemo {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.enableCheckpointing(1000); // 非常关键，一定要设置启动检查点！！
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         Map properties= new HashMap();
         properties.put("bootstrap.servers", "localhost:9092");
@@ -47,7 +50,7 @@ public class FlinkDemo {
             }
         });
 
-        DataStream resultStream = dataStream.keyBy("tenantId").keyBy("taskId").timeWindow(Time.seconds(2),Time.seconds(1))
+        DataStream resultStream = dataStream.keyBy("tenantId").keyBy("taskId").timeWindow(Time.seconds(1))
                 .aggregate(new AggregateFunction<Task, Integer, Integer>(){
                     public Integer createAccumulator() {
                         return 0;//初始值
