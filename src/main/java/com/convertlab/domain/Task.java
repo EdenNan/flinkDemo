@@ -1,4 +1,4 @@
-package com.convertlab;
+package com.convertlab.domain;
 
 public class Task {
     String taskId;
